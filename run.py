@@ -82,7 +82,7 @@ class DueUtilClient(discord.Client):
     @asyncio.coroutine
     def on_server_join(self, server):
         server_count = util.get_server_count()
-        if server_count % 1000 == 0:
+        if server_count % 25 == 0:
             # Announce every 100 servers (for now)
             yield from util.say(gconf.announcement_channel,
                                 ":confetti_ball: I'm on __**%d SERVERS**__ now!!!1111" % server_count)
