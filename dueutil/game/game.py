@@ -3,7 +3,8 @@ import re
 import time
 
 # import enchant
-import ssdeep
+# import ssdeep     # ssdeep doesn't work in Windows?
+from ssftw import SSFTW
 # from guess_language import guess_language
 
 import generalconfig as gconf
@@ -17,6 +18,7 @@ from . import gamerules
 
 # from threading import Lock
 
+ssdeep = SSFTW()
 SPAM_TOLERANCE = 50
 # For awards in the first week. Not permanent.
 old_players = open('oldplayers.txt').read()  # For comeback award
@@ -30,15 +32,30 @@ def get_spam_level(player, message_content):
     fuzzy hash > 50% means it's probably spam
     """
 
-    message_hash = ssdeep.hash(message_content)
-    spam_level = 0
-    spam_levels = [ssdeep.compare(message_hash, prior_hash) for prior_hash in player.last_message_hashes if
-                   prior_hash is not None]
-    if len(spam_levels) > 0:
-        spam_level = max(spam_levels)
-    player.last_message_hashes.append(message_hash)
-    if spam_level > SPAM_TOLERANCE:
-        player.spam_detections += 1
+    try:
+        message_hash = ssdeep.hash(message_content)
+        spam_level = 0    
+        spam_levels = [ssdeep.compare(message_hash, prior_hash) for prior_hash in player.last_message_hashes if
+                       prior_hash is not None]
+        if len(spam_levels) > 0:
+            spam_level = max(spam_levels)
+        player.last_message_hashes.append(message_hash)
+        if spam_level > SPAM_TOLERANCE:
+            player.spam_detections += 1
+            try:
+                print("Message '" + message_content + "' detected as SPAM!")
+                print("spam_level was " + spam_level + ".")
+                print("Player " + player.name + " now has " + player.spam_detections + "spam detections.")
+            except Exception as e:
+                print("Failed to print spam detection debug message because " + e + ".")
+    except:
+        spam_level = 0 # if ssdeep doesn't work
+        try:
+            print("ssdeep failed to process message!")
+            print("Message was '" + message_content + "' by player " + player.name + ".")
+            print("BTW, player " + player.name + " has " + player.spam_detections + "spam detections.")
+        except Exception as e:
+            print("Failed to print ssdeep failure debug message because " + e + ".")
     return spam_level
 
 
