@@ -67,7 +67,7 @@ async def give_awards_for_battle(channel, battle_log: _BattleLog):
         if battle_log.turn_count == 1 and winner.level - loser.level <= 2.5:
             await  awards.give_award(channel, winner, "CritHit")
         # If it's me
-        if loser.id == "132315148487622656":
+        if loser.id == "347572935663550475":
             await awards.give_award(channel, winner, "KillMe")
 
 

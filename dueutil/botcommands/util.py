@@ -74,6 +74,9 @@ async def help(ctx, *args, **details):
             server_op_commands = events.command_event.command_list(
                 filter=lambda command:
                 command.permission == Permission.REAL_SERVER_ADMIN and command.category == category)
+            owner_only_commands = events.command_event.command_list(
+                filter=lambda command:
+                command.permission == Permission.DUEUTIL_ADMIN and command.category == category)
 
             if len(commands_for_all) > 0:
                 help_embed.add_field(name='Commands for everyone', value=', '.join(commands_for_all), inline=False)
@@ -81,6 +84,8 @@ async def help(ctx, *args, **details):
                 help_embed.add_field(name='Admins only', value=', '.join(admin_commands), inline=False)
             if len(server_op_commands) > 0:
                 help_embed.add_field(name='Server managers only', value=', '.join(server_op_commands), inline=False)
+            if (len(commands_for_all) + len(admin_commands) + len(server_op_commands) == 0) and (len(owner_only_commands) > 0):
+                help_embed.add_field(name='DueUtil owner only', value=', '.join(owner_only_commands), inline=False)
     else:
 
         help_embed.set_thumbnail(url=util.get_client(ctx.server.id).user.avatar_url)
@@ -94,7 +99,8 @@ async def help(ctx, *args, **details):
         help_embed.add_field(name=":link: Links", value=("**Invite me: %s**\n" % gconf.BOT_INVITE
                                                          + "DueUtil site: https://dueutil.tech/\n"
                                                          + "DueUtil guide: https://dueutil.tech/howto\n"
-                                                         + "Support server: https://discord.gg/n4b94VA\n"))
+                                                         + "Original Due Support server: https://discord.gg/n4b94VA\n"
+                                                         + "Another Due Clone Support server: https://discord.gg/qfrAqve"))
         help_embed.set_footer(
             text="To use admin commands you must have the manage server permission or the 'Due Commander' role.")
 
@@ -111,14 +117,17 @@ async def botinfo(ctx, **_):
 
     info_embed = discord.Embed(title="DueUtil's Information", type="rich", color=gconf.DUE_COLOUR)
     info_embed.description = "DueUtil is customizable bot to add fun commands, quests and battles to your server."
-    info_embed.add_field(name="Created by", value="[MacDue#4453](https://dueutil.tech/)")
+    info_embed.add_field(name="Based on the original DueUtil, created by", value="[MacDue#4453](https://dueutil.tech/)")
     info_embed.add_field(name="Framework",
                          value="[discord.py %s :two_hearts:](http://discordpy.readthedocs.io/en/latest/)"
                                % discord.__version__)
     info_embed.add_field(name="Version", value=gconf.VERSION),
+    info_embed.add_field(name="Another Due Clone created by", value="<@347572935663550475>")
     info_embed.add_field(name="Invite Due!", value="https://dueutil.tech/invite", inline=False)
-    info_embed.add_field(name="Support server",
+    info_embed.add_field(name="Original DueUtil Support server",
                          value="For help with the bot or a laugh join **https://discord.gg/n4b94VA**!")
+    info_embed.add_field(name="Support Server for Another Due Clone",
+                         value="For news and updates about <@398162812905455617>, join **https://discord.gg/qfrAqve**.")
     await util.say(ctx.channel, embed=info_embed)
 
 
@@ -197,6 +206,16 @@ async def duservers(ctx, **_):
     await util.say(ctx.channel, "DueUtil is active on **" + str(server_count) + " server"
                    + ("s" if server_count != 1 else "") + "**")
 
+@commands.command(permission=Permission.DISCORD_USER, args_pattern=None)
+async def duserverlist(ctx, **_):
+    """
+    [CMD_KEY]duserverlist
+    
+    WIP. Hopefully, shows a list of servers DueUtil is chillin on.
+    
+    """
+    server_list = util.get_server_list()
+    await util.say(ctx.channel, "DueUtil is active on the following servers:\n" + server_list)
 
 @commands.command(permission=Permission.SERVER_ADMIN, args_pattern="S", aliases=("setprefix",))
 async def setcmdkey(ctx, new_key, **details):
