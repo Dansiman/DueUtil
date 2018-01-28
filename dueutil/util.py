@@ -116,15 +116,39 @@ async def download_file(url):
 
 
 async def say(channel, *args, **kwargs):
+    debugmsg = ("'Say' command debugging: channel = ", channel,
+                 ".\n And type(channel) is ", type(channel), ".")
+    print(debugmsg)
     if type(channel) is str:
         # Server/Channel id
+        debugmsg = "Splitting. "
         server_id, channel_id = channel.split("/")
+        try:
+            debugmsg += ("Now, server_id is " + str(server_id) + " and channel_id is " + str(channel_id))
+            debugmsg += (".\nSetting channel to get_server(server_id).get_channel(channel_id). Result:\n")
+        except Exception as e:
+            print(e)
         channel = get_server(server_id).get_channel(channel_id)
+        try:
+            debugmsg += "channel is now " + str(channel) + "."
+        except Exception as e:
+            print(e)
+        print(debugmsg)
     if "client" in kwargs:
         client = kwargs["client"]
+        debugmsg = "Now client = " + str(client) + "."
+        print(debugmsg)
         del kwargs["client"]
+        print("kwargs[\"client\"] done got del'd")
     else:
+        debugmsg = "\"client\" is not in kwargs. Will try: client = get_client(channel.server.id)"
+        print(debugmsg)
+        try:
+            print(("channel.server.id = ", channel.server.id))
+        except:
+            print("could not output 'channel.server.id' in debug message.")
         client = get_client(channel.server.id)
+        print(("client = ", client))
     if asyncio.get_event_loop() != client.loop:
         # Allows it to speak across shards
         client.run_task(say, *((channel,) + args), **kwargs)
@@ -157,6 +181,12 @@ def pretty_time():
 def get_server_count():
     return sum(len(client.servers) for client in shard_clients)
 
+def get_server_list():
+    msg="Server list:\n"
+    for client in shard_clients:
+        for server in client.servers:
+            msg+=str(get_server_id(server)) + " " + str(server) + "\n"
+    return msg
 
 def get_server_id(source):
     if isinstance(source, str):
@@ -171,7 +201,17 @@ def get_client(source):
     try:
         return shard_clients[get_shard_index(get_server_id(source))]
     except IndexError:
-        return None
+        # return None
+        # temporary hack:
+        try:
+            print("Invalid index returned from 'shard_clients[get_shard_index(get_server_id(" + source + ")")
+        except Exception as e:
+            print(e)
+        try:
+            return shard_clients[len(shard_clients)-1] # temporary hack
+        except:
+            print("My hack failed. Returning shard_client 0.")
+            return shard_clients[0]
 
 
 def get_server(server_id):
