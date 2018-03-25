@@ -3,8 +3,8 @@ import re
 import time
 
 # import enchant
-# import ssdeep     # ssdeep doesn't work in Windows?
-from ssftw import SSFTW
+import ssdeep     # ssdeep doesn't work in Windows? # if Mac's ssdeep doesn't work, comment this line
+# from ssftw import SSFTW   # if Mac's ssdeep doesn't work, uncomment this
 # from guess_language import guess_language
 
 import generalconfig as gconf
@@ -18,7 +18,7 @@ from . import gamerules
 
 # from threading import Lock
 
-ssdeep = SSFTW()
+# ssdeep = SSFTW()  # if Mac's ssdeep doesn't work, uncomment this
 SPAM_TOLERANCE = 50
 # For awards in the first week. Not permanent.
 old_players = open('oldplayers.txt').read()  # For comeback award
