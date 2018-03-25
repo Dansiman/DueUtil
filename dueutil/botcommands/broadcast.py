@@ -10,9 +10,6 @@ from ..permissions import Permission
 def get_all_servers():
     return [server for client in util.shard_clients for server in client.servers]
 
-def get_channels(server):
-    return [channel.id for channel in server.channels]
-
 
 @commands.command(permission=Permission.DUEUTIL_ADMIN, args_pattern="S", aliases=["broadcast", "motd"])
 async def broadcastcrap(ctx, content, **__):
@@ -23,15 +20,15 @@ async def broadcastcrap(ctx, content, **__):
     
     """
     for server in get_all_servers():
-        util.logger.info("Broadcast debugging: server is " + str(server) + " with ID " + str(server.id))
+        print(("Broadcast debugging: server is", server, server.id))
         if server.default_channel is not None:
             try:
-                util.logger.info("default_channel is: " + str(server.default_channel))
+                print(("default_channel is: " + str(server.default_channel)))
             except Exception as e:
-                util.logger.info(e)
+                print(e)
             await util.say(server.default_channel, "**DUE ANNOUNCEMENT!**\n" + content)
         else:
-            util.logger.info("Server has no default channel. Skipping for now.")
+            print(("Server has no default channel. Skipping for now."))
 
         # if a large number of servers this may help
         await asyncio.sleep(0.1)
