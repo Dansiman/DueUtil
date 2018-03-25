@@ -376,6 +376,15 @@ async def stats_screen(channel, player):
     width = draw.textsize(exp, font=font_tiny)[0]
     if exp_bar_width >= width + 2:
         draw.text((98 + exp_bar_width - width, 72), exp, exp_colour, font=font_tiny)
+    elif (140 - exp_bar_width) >= width + 2:
+        draw.text((99 + exp_bar_width, 72), exp, theme["expBarColour"][1], font=font_tiny)
+    else:
+        exp1 = "EXP: " + str(math.trunc(player.exp)) + " /"
+        exp2 = " " + str(next_level_exp)
+        width1 = draw.textsize(exp1, font=font_tiny)[0]
+        width2 = draw.textsize(exp2, font=font_tiny)[0]
+        draw.text((98 + exp_bar_width - width1, 72), exp1, exp_colour, font=font_tiny)
+        draw.text((99 + exp_bar_width, 72), exp2, theme["expBarColour"][1], font=font_tiny)
 
     level = str(math.trunc(player.level))
     attk = str(round(player.attack, 2))
