@@ -525,6 +525,6 @@ def weapon_info(weapon_name=None, **details):
     embed.add_field(name='Price',
                     value=util.format_number(weapon.price // price_divisor, money=True, full_precision=True))
     embed.add_field(name="Hit Message", value=weapon.hit_message)
-    embed.add_field(name="Type", value="Melee" if weapon.melee else "Ranged")
+    embed.add_field(name="Type", value="Melee <:Attack:398237425731633152>" if weapon.melee else "Ranged <:Accuracy:398237425576706049>")
     embed.set_footer(text='Image supplied by weapon creator.')
     return embed
