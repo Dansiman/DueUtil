@@ -43,19 +43,19 @@ def get_spam_level(player, message_content):
         if spam_level > SPAM_TOLERANCE:
             player.spam_detections += 1
             try:
-                print("Message '" + message_content + "' detected as SPAM!")
-                print("spam_level was " + spam_level + ".")
-                print("Player " + player.name + " now has " + player.spam_detections + "spam detections.")
+                util.logger.info("Message '" + message_content + "' detected as SPAM!")
+                util.logger.info("spam_level was " + str(spam_level) + ".")
+                util.logger.info("Player " + player.name + " now has " + str(player.spam_detections) + " spam detections.")
             except Exception as e:
-                print("Failed to print spam detection debug message because " + e + ".")
+                util.logger.info("Failed to print spam detection debug message because " + str(e) + ".")
     except:
         spam_level = 0 # if ssdeep doesn't work
         try:
-            print("ssdeep failed to process message!")
-            print("Message was '" + message_content + "' by player " + player.name + ".")
-            print("BTW, player " + player.name + " has " + player.spam_detections + "spam detections.")
+            util.logger.info("ssdeep failed to process message!")
+            util.logger.info("Message was '" + message_content + "' by player " + player.name + ".")
+            util.logger.info("BTW, player " + player.name + " has " + str(player.spam_detections) + " spam detections.")
         except Exception as e:
-            print("Failed to print ssdeep failure debug message because " + e + ".")
+            util.logger.info("Failed to print ssdeep failure debug message because " + str(e) + ".")
     return spam_level
 
 
