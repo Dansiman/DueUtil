@@ -345,7 +345,7 @@ async def giveaward(ctx, player, award_id, **_):
 async def giveexp(ctx, player, exp, **_):
     # (attack + strg + accy) * 100
     if exp < 0.1:
-        raise util.DueUtilException(ctx.channel, "The minimum exp that can be given is 0.!")
+        raise util.DueUtilException(ctx.channel, "The minimum exp that can be given is 0.1!")
     increase_stat = exp/300
     player.progress(increase_stat, increase_stat, increase_stat,
                     max_exp=math.inf, max_attr=math.inf)

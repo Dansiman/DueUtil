@@ -20,7 +20,7 @@ async def broadcastcrap(ctx, content, **__):
     
     """
     for server in get_all_servers():
-        print(("Broadcast debugging: server is", server, server.id))
+        print(("Broadcast debugging: server is", server.name, server.id))
         if server.default_channel is not None:
             try:
                 print(("default_channel is: " + str(server.default_channel)))

@@ -127,7 +127,7 @@ async def botinfo(ctx, **_):
     info_embed.add_field(name="Original DueUtil Support server",
                          value="For help with the bot or a laugh join **https://discord.gg/n4b94VA**!")
     info_embed.add_field(name="Support Server for Another Due Clone",
-                         value="For news and updates about <@398162812905455617>, join **https://discord.gg/qfrAqve**.")
+                         value="For news and updates about <@398162812905455617>, join **%s**." % gconf.BOT_INVITE)
     await util.say(ctx.channel, embed=info_embed)
 
 
@@ -214,7 +214,8 @@ async def duserverlist(ctx, **_):
     WIP. Hopefully, shows a list of servers DueUtil is chillin on.
     
     """
-    server_list = util.get_server_list()
+    server_list = "*null*"
+    # server_list = util.get_server_list()
     await util.say(ctx.channel, "DueUtil is active on the following servers:\n" + server_list)
 
 @commands.command(permission=Permission.SERVER_ADMIN, args_pattern="S", aliases=("setprefix",))
