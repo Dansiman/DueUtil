@@ -13,7 +13,7 @@ def conn():
         client.admin.authenticate(config['user'], config['pwd'], mechanism='SCRAM-SHA-1')
         uri = "mongodb://" + config['user'] + ":" + config['pwd'] + "@" + config[
             'host'] + "/admin?authMechanism=SCRAM-SHA-1"
-        db = MongoClient(uri).duetest
+        db = MongoClient(uri).dueutil
         # client.drop_database('dueutil')
         return db
     else:
